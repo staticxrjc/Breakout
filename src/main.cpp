@@ -2,7 +2,7 @@
 #include <engine.h>
 
 int main() {
-    engine maze(500, 500); 
+    engine maze(80, 80, 4);
 
     while (maze.isRunning())
     {

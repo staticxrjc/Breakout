@@ -7,14 +7,17 @@ class engine {
 private:
     // SFML Variables
     std::shared_ptr<sf::RenderWindow> window;
-    sf::Event event;
+    sf::Event event{};
+
+    // Breakout Variables
+    std::vector<int> breakoutMap;
 
     // Initialization
-    void initVariables();
+    void initVariables(int, int);
     void initWindow(int, int);
     
 public:
-    engine(int = 200,int = 200);
+    explicit engine(int, int, int);
     ~engine();
     bool isRunning();
     void update();
