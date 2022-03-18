@@ -10,11 +10,15 @@ private:
     sf::Event event{};
 
     // Breakout Variables
-    std::vector<int> breakoutMap;
+    std::vector<int> mBreakoutMap;
+    int mCellSize, mXCells, mYCells;
 
     // Initialization
-    void initVariables(int, int);
-    void initWindow(int, int);
+    void initVariables();
+    void initWindow();
+
+    // Breakout Private Functions
+    void drawMap();
     
 public:
     explicit engine(int, int, int);

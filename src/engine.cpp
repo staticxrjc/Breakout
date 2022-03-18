@@ -1,30 +1,49 @@
 #include <engine.h>
 #include <iostream>
 
-void engine::initVariables(int xCells, int yCells) {
+void engine::initVariables() {
     //
-    breakoutMap.resize(xCells*yCells);
-    for(int y = 0; y < yCells; y++) {
-        for(int x = 0; x < xCells; x++) {
-            if (y == 0 || x == (xCells -1) || x == 0)
-                breakoutMap[x + (y * xCells)] = -1;
-            else if ((y % 5 == 0) && (x > (.2*xCells)) && (x < (.8*xCells)) && (y < (.5*yCells)))
-                breakoutMap[x + (y * xCells)] = 1;
+    mBreakoutMap.resize(this->mXCells * this->mYCells);
+    for(int y = 0; y < this->mYCells; y++) {
+        for(int x = 0; x < this->mXCells; x++)
+            if (y == 0 || x == (this->mXCells - 1) || x == 0)
+                mBreakoutMap[x + (y * this->mXCells)] = -1;
+            else if ((y % 10 == 0) && (x > (.2*this->mXCells)) && (x < (.8 * this->mXCells)) && (y < (.6 * this->mYCells)))
+                mBreakoutMap[x + (y * this->mXCells)] = 1;
             else
-                breakoutMap[x + (y * xCells)] = 0;
-            std::cout << breakoutMap[x + (y * xCells)];
-        }
-        std::printf("\n");
+                mBreakoutMap[x + (y * this->mXCells)] = 0;
     }
 };
 
-void engine::initWindow(int x, int y){
+void engine::initWindow(){
     //
+    this->window = std::make_shared<sf::RenderWindow>(sf::VideoMode(this->mXCells * this->mCellSize, this->mYCells * this->mCellSize), "Hello SFML!");
 }
 
-engine::engine(int xCells, int yCells, int cellSize) {
-    this->window = std::make_shared<sf::RenderWindow>(sf::VideoMode(xCells*cellSize,yCells*cellSize), "Hello SFML!");
-    initVariables(xCells, yCells);
+void engine::drawMap() {
+    // draws map based on mBreakoutMap array
+    sf::RectangleShape shape(sf::Vector2f(float(this->mCellSize), float(this->mCellSize)));
+
+    // set the shape color to green
+    shape.setFillColor(sf::Color(100, 250, 50));
+
+    // Draw if not == 0, nothing is there
+    for(int y = 0; y < this->mYCells; y++) {
+        for (int x = 0; x < this->mXCells; x++) {
+            if(this->mBreakoutMap[x + (y * mXCells)] != 0) {
+                shape.setPosition(sf::Vector2f(float(x*this->mCellSize),float(y*this->mCellSize)));
+                this->window->draw(shape);
+            }
+        }
+    }
+}
+
+engine::engine(int x, int y, int size) {
+    this->mCellSize = size;
+    this->mXCells = x;
+    this->mYCells = y;
+    initWindow();
+    initVariables();
 }
 
 engine::~engine() {
@@ -50,13 +69,8 @@ void engine::renderScreen() {
     // clear window
     this->window->clear(sf::Color::Black);
 
-    sf::CircleShape shape(50.f);
+    this->drawMap();
 
-    // set the shape color to green
-    shape.setFillColor(sf::Color(100, 250, 50));
-
-    this->window->draw(shape);
-    
     // Display frame
     this->window->display();
 }
