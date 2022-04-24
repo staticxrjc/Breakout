@@ -1,24 +1,18 @@
 #include <iostream>
-#include <SFML/Graphics.hpp>
+#include <engine.h>
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!!!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    engine maze(80, 80, 4);
 
-    while (window.isOpen())
+    while (maze.isRunning())
     {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
+        // Event Loop
+        maze.processEvent();
 
-        window.clear();
-        window.draw(shape);
-        window.display();
+        // Update
+        maze.update();
+
+        // Render
+        maze.renderScreen();
     }
-
-    return 0;
 }
