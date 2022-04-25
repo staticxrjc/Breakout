@@ -1,12 +1,17 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.18)
 project(template VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD 17)
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 add_subdirectory(src)
-add_subdirectory(sdk/SFML)
+IF (WIN32)
+    # set stuff for windows
+    add_subdirectory(sdk/SFML)
+    include_directories(sdk/SFML/include)
+ELSE()
+    find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
+ENDIF()
 include_directories(inc)
-include_directories(sdk/SFML/include)
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 
