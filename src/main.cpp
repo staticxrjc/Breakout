@@ -1,7 +1,7 @@
 #include <engine.h>
 
 int main() {
-    engine maze(160, 160, 4);
+    engine maze(80, 50, 16);
 
     while (maze.isRunning())
     {

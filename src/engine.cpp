@@ -1,13 +1,16 @@
 #include <engine.h>
+#include <block.h>
 
 void engine::initVariables() {
-    //
+    // Resize vector to size of X * Y cells
     mBreakoutMap.resize(this->mXCells * this->mYCells);
+
+    // Populate map dynamically
     for(int y = 0; y < this->mYCells; y++) {
         for(int x = 0; x < this->mXCells; x++)
             if (y == 0 || x == (this->mXCells - 1) || x == 0)
                 mBreakoutMap[x + (y * this->mXCells)] = -1;
-            else if ((y % 10 == 0) && (x > (.2*this->mXCells)) && (x < (.8 * this->mXCells)) && (y < (.6 * this->mYCells)))
+            else if ((y % 8 == 0) && (x > (.2*this->mXCells)) && (x < (.8 * this->mXCells)) && (y < (.6 * this->mYCells)))
                 mBreakoutMap[x + (y * this->mXCells)] = 1;
             else
                 mBreakoutMap[x + (y * this->mXCells)] = 0;
@@ -23,14 +26,18 @@ void engine::drawMap() {
     // draws map based on mBreakoutMap array
     sf::RectangleShape shape(sf::Vector2f(float(this->mCellSize), float(this->mCellSize)));
 
-    // set the shape color to green
-    shape.setFillColor(sf::Color(100, 250, 50));
-
     // Draw if not == 0, nothing is there
     for(int y = 0; y < this->mYCells; y++) {
         for (int x = 0; x < this->mXCells; x++) {
-            if(this->mBreakoutMap[x + (y * mXCells)] != 0) {
+            // set the shape color to green
+            shape.setFillColor(sf::Color(100, 250, 50));
+            if(this->mBreakoutMap[x + (y * mXCells)] == -1) {
                 shape.setPosition(sf::Vector2f(float(x*this->mCellSize),float(y*this->mCellSize)));
+                this->window->draw(shape);
+            }
+            else if (this->mBreakoutMap[x + (y * mXCells)] == 1) {
+                shape.setFillColor(sf::Color(55, 55 ,150));
+                shape.setPosition(sf::Vector2f(float(x*this->mCellSize), float(y*this->mCellSize)));
                 this->window->draw(shape);
             }
         }

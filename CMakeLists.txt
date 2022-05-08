@@ -16,9 +16,11 @@ include_directories(inc)
 add_executable(${PROJECT_NAME} src/main.cpp)
 
 add_library(
-    engine STATIC
-    src/engine.cpp
-    inc/engine.h
+        engine STATIC
+        src/engine.cpp
+        inc/engine.h
+        src/block.cpp
+        inc/block.h
 )
 
 target_link_libraries(${PROJECT_NAME} 
