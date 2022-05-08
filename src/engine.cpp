@@ -1,5 +1,6 @@
 #include <engine.h>
 #include <block.h>
+#include <player.h>
 
 void engine::initVariables() {
     // Resize vector to size of X * Y cells
@@ -10,8 +11,9 @@ void engine::initVariables() {
         for(int x = 0; x < this->mXCells; x++)
             if (y == 0 || x == (this->mXCells - 1) || x == 0)
                 mBreakoutMap[x + (y * this->mXCells)] = -1;
-            else if ((y % 8 == 0) && (x > (.2*this->mXCells)) && (x < (.8 * this->mXCells)) && (y < (.6 * this->mYCells)))
-                mBreakoutMap[x + (y * this->mXCells)] = 1;
+            else if ((y % 8 == 0) && (x > (.2*this->mXCells)) && (x < (.8 * this->mXCells)) && (y < (.6 * this->mYCells))) {
+                mBreakoutMap[x + (y * this->mXCells)] = 20;
+            }
             else
                 mBreakoutMap[x + (y * this->mXCells)] = 0;
     }
@@ -35,7 +37,7 @@ void engine::drawMap() {
                 shape.setPosition(sf::Vector2f(float(x*this->mCellSize),float(y*this->mCellSize)));
                 this->window->draw(shape);
             }
-            else if (this->mBreakoutMap[x + (y * mXCells)] == 1) {
+            else if (this->mBreakoutMap[x + (y * mXCells)] >= 1) {
                 shape.setFillColor(sf::Color(55, 55 ,150));
                 shape.setPosition(sf::Vector2f(float(x*this->mCellSize), float(y*this->mCellSize)));
                 this->window->draw(shape);

@@ -21,6 +21,8 @@ add_library(
         inc/engine.h
         src/block.cpp
         inc/block.h
+        src/player.cpp
+        inc/player.h
 )
 
 target_link_libraries(${PROJECT_NAME} 
