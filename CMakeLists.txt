@@ -4,6 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 add_subdirectory(src)
+include_directories(inc)
 IF (WIN32)
     # set stuff for windows
     add_subdirectory(sdk/SFML)
@@ -11,7 +12,6 @@ IF (WIN32)
 ELSE()
     find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 ENDIF()
-include_directories(inc)
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 
