@@ -1,5 +1,4 @@
 #include <engine.h>
-#include <block.h>
 #include <player.h>
 
 void engine::initVariables() {
@@ -17,11 +16,14 @@ void engine::initVariables() {
             else
                 mBreakoutMap[x + (y * this->mXCells)] = 0;
     }
+
+    // Create Player
+    player = std::make_shared<Player>(window, this->mXCells,this->mYCells,float(this->mCellSize));
 };
 
 void engine::initWindow(){
     //
-    this->window = std::make_shared<sf::RenderWindow>(sf::VideoMode(this->mXCells * this->mCellSize, this->mYCells * this->mCellSize), "Hello SFML!");
+    this->window = std::make_shared<sf::RenderWindow>(sf::VideoMode(this->mXCells * this->mCellSize, this->mYCells * this->mCellSize), "Breakout!");
 }
 
 void engine::drawMap() {
@@ -70,6 +72,14 @@ void engine::processEvent() {
     while (this->window->pollEvent(this->event)) {
         if (this->event.type == sf::Event::Closed)
             this->window->close();
+        else if (this->event.type == sf::Event::KeyPressed) {
+            if(this->event.key.code == sf::Keyboard::Right)
+                this->player->moveRight();
+            else if(this->event.key.code == sf::Keyboard::Left)
+                this->player->moveLeft();
+            else
+                std::cout << this->event.key.code << std::endl;
+        }
     }
 }
 
@@ -78,6 +88,7 @@ void engine::renderScreen() {
     this->window->clear(sf::Color::Black);
 
     this->drawMap();
+    this->player->drawPlayer();
 
     // Display frame
     this->window->display();
