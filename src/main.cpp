@@ -1,5 +1,6 @@
 #include <engine.h>
-
+#include <chrono>
+#include <thread>
 int main() {
     engine maze(80, 50, 16);
 
@@ -13,5 +14,7 @@ int main() {
 
         // Render
         maze.renderScreen();
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 }

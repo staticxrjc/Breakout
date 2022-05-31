@@ -9,6 +9,7 @@ private:
     // SFML Variables
     std::shared_ptr<sf::RenderWindow> window;
     sf::Event event;
+    sf::Clock clock;
 
     // Breakout Variables
     std::vector<int> mBreakoutMap;

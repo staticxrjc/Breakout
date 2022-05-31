@@ -5,6 +5,9 @@ void engine::initVariables() {
     // Resize vector to size of X * Y cells
     mBreakoutMap.resize(this->mXCells * this->mYCells);
 
+    // Start Clock
+    clock.restart();
+
     // Populate map dynamically
     for(int y = 0; y < this->mYCells; y++) {
         for(int x = 0; x < this->mXCells; x++)
@@ -66,6 +69,8 @@ bool engine::isRunning(){
 
 void engine::update() {
     //
+    this->player->movePlayer(clock.getElapsedTime().asSeconds()*10);
+    clock.restart();
 }
 
 void engine::processEvent() {
@@ -77,6 +82,12 @@ void engine::processEvent() {
                 this->player->moveRight();
             else if(this->event.key.code == sf::Keyboard::Left)
                 this->player->moveLeft();
+            else
+                std::cout << this->event.key.code << std::endl;
+        }
+        else if (this->event.type == sf::Event::KeyReleased)  {
+            if(this->event.key.code == sf::Keyboard::Right || this->event.key.code == sf::Keyboard::Left)
+                this->player->stop(event);
             else
                 std::cout << this->event.key.code << std::endl;
         }
