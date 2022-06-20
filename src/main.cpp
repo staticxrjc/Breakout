@@ -1,6 +1,7 @@
 #include <engine.h>
 #include <chrono>
 #include <thread>
+
 int main() {
     engine maze(80, 50, 16);
 

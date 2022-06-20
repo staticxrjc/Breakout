@@ -15,7 +15,7 @@ Player::~Player() {
 }
 
 void Player::drawPlayer() {
-    // Create a Rectangle that is player width and height
+    // Create a Rectangle that is _player width and height
     sf::RectangleShape shape(sf::Vector2(this->mPlayerWidth, this->mCellSize));
 
     shape.setFillColor(sf::Color(255,255,255));

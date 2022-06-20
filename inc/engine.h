@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <player.h>
+#include <ball.h>
+#include <cmath>
 
 class engine {
 private:
@@ -20,10 +22,13 @@ private:
     void initWindow();
 
     // Child Classes
-    std::shared_ptr<Player> player;
+    std::shared_ptr<Player> _player;
+    std::shared_ptr<Ball> _ball;
 
     // Breakout Private Functions
     void drawMap();
+    int checkCollision(std::shared_ptr<BoundingBox>,std::shared_ptr<BoundingBox>);
+    int checkCollision(std::shared_ptr<BoundingBox>,std::vector<int>);
 
 public:
     explicit engine(int, int, int);

@@ -23,6 +23,12 @@ add_library(
         inc/block.h
         src/player.cpp
         inc/player.h
+        src/ball.cpp
+        inc/ball.h
+        src/vector2.cpp
+        inc/vector2.h
+        src/boundingBox.cpp
+        inc/boundingBox.h
 )
 
 target_link_libraries(${PROJECT_NAME} 

@@ -1,5 +1,6 @@
 #include <engine.h>
 #include <player.h>
+#include <ball.h>
 
 void engine::initVariables() {
     // Resize vector to size of X * Y cells
@@ -21,7 +22,10 @@ void engine::initVariables() {
     }
 
     // Create Player
-    player = std::make_shared<Player>(window, this->mXCells,this->mYCells,float(this->mCellSize));
+    _player = std::make_shared<Player>(window, this->mXCells, this->mYCells, float(this->mCellSize));
+
+    // Create Ball
+    _ball = std::make_unique<Ball>(window, (mXCells * mCellSize)/2 - mCellSize/2,(mYCells * mCellSize)/1.5,mCellSize);
 };
 
 void engine::initWindow(){
@@ -61,6 +65,7 @@ engine::engine(int x, int y, int size) {
 
 engine::~engine() {
     //
+    std::cout << "Engine Destroyed" << std::endl;
 }
 
 bool engine::isRunning(){
@@ -69,7 +74,20 @@ bool engine::isRunning(){
 
 void engine::update() {
     //
-    this->player->movePlayer(clock.getElapsedTime().asSeconds()*10);
+    this->_player->movePlayer(clock.getElapsedTime().asSeconds() * 10);
+    std::shared_ptr<BoundingBox> ball = this->_ball->moveBall(clock.getElapsedTime().asSeconds() * 10);
+
+    // Check Ball Collision Map
+    switch(checkCollision(ball,mBreakoutMap)) {
+        case 0:
+            this->_ball->bounceSide();
+            break;
+        case 1:
+            this->_ball->bounceVert();
+            break;
+
+    }
+
     clock.restart();
 }
 
@@ -79,15 +97,15 @@ void engine::processEvent() {
             this->window->close();
         else if (this->event.type == sf::Event::KeyPressed) {
             if(this->event.key.code == sf::Keyboard::Right)
-                this->player->moveRight();
+                this->_player->moveRight();
             else if(this->event.key.code == sf::Keyboard::Left)
-                this->player->moveLeft();
+                this->_player->moveLeft();
             else
                 std::cout << this->event.key.code << std::endl;
         }
         else if (this->event.type == sf::Event::KeyReleased)  {
             if(this->event.key.code == sf::Keyboard::Right || this->event.key.code == sf::Keyboard::Left)
-                this->player->stop(event);
+                this->_player->stop(event);
             else
                 std::cout << this->event.key.code << std::endl;
         }
@@ -99,8 +117,67 @@ void engine::renderScreen() {
     this->window->clear(sf::Color::Black);
 
     this->drawMap();
-    this->player->drawPlayer();
+    this->_player->drawPlayer();
+    this->_ball->drawBall();
+    this->_ball->drawBounding();
 
     // Display frame
     this->window->display();
+}
+
+int engine::checkCollision(std::shared_ptr<BoundingBox> first, std::shared_ptr<BoundingBox> second) {
+    return false;
+}
+
+int engine::checkCollision(std::shared_ptr<BoundingBox> box, std::vector<int> map) {
+    int x = std::floor(box->getTopLeft().x/mCellSize);
+    int y = std::floor(box->getTopLeft().y/mCellSize);
+    int index = x + mXCells * y;
+    if(map[index] != 0) {
+        printf("X = %i\n",x);
+        printf("Y = %i\n",y);
+        printf("Index = %i\n",index);
+        printf("Map Value = %i\n",map[index]);
+        if(map[index] == -1) {
+            if(y == 0)
+                return 1;
+            return 0;
+        }
+        else {
+            return 1;
+        }
+    }
+    x = std::floor(box->getTopRight().x/mCellSize);
+    y = std::floor(box->getTopRight().y/mCellSize);
+    index = x + mXCells * y;
+    if(map[index] != 0) {
+        printf("X = %i\n",x);
+        printf("Y = %i\n",y);
+        printf("Index = %i\n",index);
+        printf("Map Value = %i\n",map[index]);
+        if(y == 0)
+            return 1;
+        return 0;
+    }
+    x = std::floor(box->getBottomRight().x/mCellSize);
+    y = std::floor(box->getBottomRight().y/mCellSize);
+    index = x + mXCells * y;
+    if(map[index] != 0) {
+        printf("X = %i\n",x);
+        printf("Y = %i\n",y);
+        printf("Index = %i\n",index);
+        printf("Map Value = %i\n",map[index]);
+        return true;
+    }
+    x = std::floor(box->getBottomLeft().x/mCellSize);
+    y = std::floor(box->getBottomLeft().y/mCellSize);
+    index = x + mXCells * y;
+    if(map[index] != 0) {
+        printf("X = %i\n",x);
+        printf("Y = %i\n",y);
+        printf("Index = %i\n",index);
+        printf("Map Value = %i\n",map[index]);
+        return true;
+    }
+    return -1;
 }

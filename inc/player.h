@@ -7,7 +7,7 @@
 class Player {
     std::shared_ptr<sf::RenderWindow> window;
     float mXPosition, mYPosition, mCellSize, mVelocity, mPlayerWidth, mBoardWidth, mAcceleration;
-    bool mLeftPressed, mRightPressed;
+    bool mLeftPressed{}, mRightPressed{};
 
 public:
     Player(std::shared_ptr<sf::RenderWindow>&,float,float,float);
